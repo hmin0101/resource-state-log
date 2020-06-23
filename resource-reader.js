@@ -5,6 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
+const analysis = require('./analysis');
 // Get config
 const config = JSON.parse(fs_1.default.readFileSync(path_1.default.join(__dirname, "./config.json")).toString());
 // Handler
@@ -41,10 +42,18 @@ function cycle() {
         const resource = config.resource[key];
         // Read
         const data = fs_1.default.readFileSync(resource.input).toString();
+        // Analysis
+        let resultData;
+        if (key === "cpu") {
+            resultData = analysis.cpu(data);
+        }
+        else if (key === "mem") {
+            resultData = analysis.memory(data);
+        }
         // Write
         const dirPath = path_1.default.join(config.logDir + "/" + resource.outputDir);
         const filePath = dirPath + "/" + datetime + "_" + key + "Info";
-        fs_1.default.writeFile(filePath, data, (err) => {
+        fs_1.default.writeFile(filePath, JSON.stringify(resultData), (err) => {
             if (err) {
                 console.error(err);
             }

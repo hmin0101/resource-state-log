@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+const analysis = require('./analysis');
 // Get config
 const config: any = JSON.parse(fs.readFileSync(path.join(__dirname, "./config.json")).toString());
 // Handler
@@ -36,10 +37,18 @@ function cycle() {
         const resource = config.resource[key];
         // Read
         const data: string = fs.readFileSync(resource.input).toString();
+        // Analysis
+        let resultData: any;
+        if (key === "cpu") {
+            resultData = analysis.cpu(data);
+        } else if (key === "mem") {
+            resultData = analysis.memory(data);
+        }
+
         // Write
         const dirPath: string = path.join(config.logDir + "/" + resource.outputDir);
         const filePath: string = dirPath + "/" + datetime + "_" + key + "Info";
-        fs.writeFile(filePath, data, (err) => {
+        fs.writeFile(filePath, JSON.stringify(resultData), (err) => {
             if (err) {
                 console.error(err);
             } else {
