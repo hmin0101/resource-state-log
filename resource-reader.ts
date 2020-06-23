@@ -47,7 +47,7 @@ function cycle() {
 
         // Write
         const dirPath: string = path.join(config.logDir + "/" + resource.outputDir);
-        const filePath: string = dirPath + "/" + datetime + "_" + key + "Info";
+        const filePath: string = dirPath + "/" + datetime + "_" + key + "Info.json";
         fs.writeFile(filePath, JSON.stringify(resultData), (err) => {
             if (err) {
                 console.error(err);
