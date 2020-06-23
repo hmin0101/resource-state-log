@@ -43,7 +43,7 @@ function cycle() {
             if (err) {
                 console.error(err);
             } else {
-                console.log("Create meminfo (" + datetime + ")");
+                console.log("Create " + key + " info (" + datetime + ")");
             }
         });
     }
