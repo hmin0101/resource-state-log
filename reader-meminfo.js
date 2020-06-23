@@ -18,24 +18,41 @@ function customInverval() {
 }
 // Cycle
 function cycle() {
-    const data = fs_1.default.readFileSync(config.input).toString();
-    // Check output directory
-    const exist = fs_1.default.existsSync(config.output);
-    if (!fs_1.default.existsSync(config.output)) {
+    // Check output directory (main = logs directory)
+    let exist = fs_1.default.existsSync(config.logDir);
+    if (!exist) {
         fs_1.default.mkdirSync(config.output);
         console.log("Create log directory");
     }
-    // Write Datat
+    // Check output log directory
+    for (const key of Object.keys(config.resource)) {
+        const resource = config.resource[key];
+        const dirPath = path_1.default.join(config.logDir + "/" + resource.outputDir);
+        exist = fs_1.default.existsSync(dirPath);
+        if (!exist) {
+            fs_1.default.mkdirSync(dirPath);
+            console.log("Create log directory");
+        }
+    }
+    // Get current time
     const datetime = Date.now();
-    const filePath = config.output + "/" + datetime + "_meminfo";
-    fs_1.default.writeFile(filePath, data, (err) => {
-        if (err) {
-            console.error(err);
-        }
-        else {
-            console.log("Create meminfo (" + datetime + ")");
-        }
-    });
+    // Read log and write data
+    for (const key of Object.keys(config.resource)) {
+        const resource = config.resource[key];
+        // Read
+        const data = fs_1.default.readFileSync(resource.input).toString();
+        // Write
+        const dirPath = path_1.default.join(config.logDir + "/" + resource.outputDir);
+        const filePath = dirPath + "/" + datetime + "_" + key + "Info";
+        fs_1.default.writeFile(filePath, data, (err) => {
+            if (err) {
+                console.error(err);
+            }
+            else {
+                console.log("Create meminfo (" + datetime + ")");
+            }
+        });
+    }
 }
 // Exit
 process.on('SIGTERM', function () {

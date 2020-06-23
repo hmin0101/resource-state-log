@@ -1,5 +1,14 @@
 {
     "interval": 5000,
-    "input": "/proc/meminfo",
-    "output": "./logs"
+    "logDir": "./logs",
+    "resource": {
+        "cpu": {
+            "input": "/proc/stat",
+            "outputDir": "cpu"
+        },
+        "mem": {
+            "input": "/proc/meminfo",
+            "outputDir": "mem"
+        }
+    }
 }
