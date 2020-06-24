@@ -1,9 +1,10 @@
 "use strict";
 module.exports = {
-    cpu: (data) => {
+    cpu: (datetime, data) => {
         const rows = data.split('\n');
         // Set cpuInfo
         const cpuInfo = {
+            datetime: datetime,
             core: {},
             processes: 0,
             procs_running: 0,
@@ -44,7 +45,7 @@ module.exports = {
         // Return
         return cpuInfo;
     },
-    memory: (data) => {
+    memory: (datetime, data) => {
         // remove blank and kB
         let convertedData = data.replace(/ /g, '');
         convertedData = convertedData.replace(/kB/g, '');
@@ -52,6 +53,7 @@ module.exports = {
         const rows = convertedData.split('\n');
         // Create memInfo
         const memInfo = {
+            datetime: datetime,
             unit: "KB",
             total: Number((rows[0].split(':'))[1]),
             free: Number((rows[1].split(':'))[1]),

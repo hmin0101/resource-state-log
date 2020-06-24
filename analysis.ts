@@ -1,8 +1,9 @@
 module.exports = {
-    cpu: (data: string) => {
+    cpu: (datetime: string, data: string) => {
         const rows: string[] = data.split('\n');
         // Set cpuInfo
         const cpuInfo: any = {
+            datetime: datetime,
             core: {},
             processes: 0,
             procs_running: 0,
@@ -42,7 +43,7 @@ module.exports = {
         return cpuInfo;
     },
 
-    memory: (data: string) => {
+    memory: (datetime: string, data: string) => {
         // remove blank and kB
         let convertedData: string = data.replace(/ /g, '');
         convertedData = convertedData.replace(/kB/g, '');
@@ -50,6 +51,7 @@ module.exports = {
         const rows: string[] = convertedData.split('\n');
         // Create memInfo
         const memInfo: any = {
+            datetime: datetime,
             unit: "KB",
             total: Number((rows[0].split(':'))[1]),
             free: Number((rows[1].split(':'))[1]),
